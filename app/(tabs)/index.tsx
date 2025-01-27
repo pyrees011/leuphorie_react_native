@@ -1,16 +1,22 @@
 import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+// Icons
 import { Waves, Activity, Calendar, Bell } from 'lucide-react-native';
-import { router } from 'expo-router';
 
 export default function Home() {
+  // TODO: make this dynamic
+  // TODO: connect to the database
+  // TODO: fix the states
+  // TODO: fix the scroll view
+  // TODO: divide into components if possible
   const user = {
     username: "Ferdinand",
     avatar: "https://i.pinimg.com/736x/f3/d2/34/f3d2346a59335f12ec7b6c460177414a.jpg"
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }} className="bg-gray-100">
+    <SafeAreaView style={{ flexGrow: 1 }} className="bg-gray-100">
       {/* Header with Avatar */}
       <View className="flex-row items-center p-4 bg-white">
         <Image 
@@ -32,7 +38,8 @@ export default function Home() {
         className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: 20 // Add some bottom padding for better scrolling
+          flexGrow: 1,
+          paddingBottom: 20
         }}
       >
         {/* Welcome Banner */}
@@ -53,7 +60,7 @@ export default function Home() {
             <Text className="text-xl font-semibold mb-4">Dashboard Overview</Text>
             <View className="flex-row justify-between px-4">
               {dashboardData.map((item, index) => (
-                <View className="items-center">
+                <View className="items-center" key={index}>
                   <Text className="text-gray-600">{item.title}</Text>
                   <Text className="text-lg font-semibold">{item.value}</Text>
                 </View>
@@ -66,7 +73,7 @@ export default function Home() {
             <Text className="text-xl font-semibold mb-4">Quick Stats</Text>
             <View className="gap-2">
               {quickStatsData.map((item, index) => (
-                <View className={`p-4 rounded-lg ${item.color}`}>
+                <View className={`p-4 rounded-lg ${item.color}`} key={index}>
                   <Text className={`text-sm ${item.textColor}`}>{item.title}</Text>
                   <Text className={`text-xl font-semibold`}>{item.value}</Text>
                 </View>
@@ -84,7 +91,7 @@ export default function Home() {
             </View>
             <View className="gap-2">
               {tasksData.map((item, index) => (
-                <TouchableOpacity className="border border-gray-200 p-3 rounded-lg">
+                <TouchableOpacity className="border border-gray-200 p-3 rounded-lg" key={index}>
                   <Text className="font-medium">{item.title}</Text>
                   <Text className="text-gray-500 text-sm">{item.description}</Text>
                 </TouchableOpacity>
@@ -97,9 +104,9 @@ export default function Home() {
             <Text className="text-xl font-semibold mb-4">Recent Activity</Text>
             <View className="gap-2">
               {activityData.map((item, index) => (
-                <View className="flex-row items-center space-x-3">
+                <View className="flex-row items-center space-x-3" key={index}>
                   <View className="w-2 h-2 rounded-full bg-emerald-400" />
-                  <Text className="text-gray-600 flex-1">{item.title}</Text>
+                  <Text className="text-gray-600">{item.title}</Text>
                   <Text className="text-gray-400">{item.time}</Text>
                 </View>
               ))}
