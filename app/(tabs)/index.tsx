@@ -6,7 +6,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 items-center justify-center bg-white">
       <Text className="text-2xl font-bold">Initializing...</Text>
-            <TouchableOpacity onPress={() => router.replace("/SignupScreen")}>
+            <TouchableOpacity onPress={() => router.replace("/RegisterScreen")}>
               <Text>Don't have an account? Sign Up</Text>
             </TouchableOpacity>
     </SafeAreaView>
