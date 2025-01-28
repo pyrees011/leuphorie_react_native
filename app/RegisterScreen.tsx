@@ -15,12 +15,6 @@ export default function RegisterScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white p-5">
-      <TouchableOpacity
-        className="mb-6"
-        onPress={() => router.back()}
-      >
-        <ArrowLeft size={24} color="#666" />
-      </TouchableOpacity>
 
       <View className="gap-2 mb-6">
         <Text className="text-2xl font-bold text-gray-900">Register</Text>

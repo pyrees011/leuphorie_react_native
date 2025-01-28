@@ -14,15 +14,9 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white p-5">
-      <TouchableOpacity
-        className="mb-6"
-        onPress={() => router.back()}
-      >
-        <ArrowLeft size={24} color="#666" />
-      </TouchableOpacity>
 
-      <View className="gap-2 mb-6">
-        <Text className="text-2xl font-bold text-gray-900">Sign in to your Account</Text>
+      <View className="gap-1 mb-6">
+        <Text className="text-2xl font-bold text-gray-900">Leuphorie</Text>
         <Text className="text-base text-gray-600">Sign in to your Account</Text>
       </View>
 

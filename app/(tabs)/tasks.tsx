@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Plus, Check, Bell } from 'lucide-react-native';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import { useState, useCallback } from 'react';
+import { AddTaskModal } from '../../components/ui/AddTaskModal';
 
 interface DeletedTask {
   task: typeof tasks[0];
@@ -17,6 +18,7 @@ interface CategoryCardProps {
 
 export default function Tasks() {
   const [tasksList, setTasksList] = useState(tasks);
+  const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const user = {
     username: "Ferdinand",
     avatar: "https://i.pinimg.com/736x/f3/d2/34/f3d2346a59335f12ec7b6c460177414a.jpg"
@@ -31,6 +33,17 @@ export default function Tasks() {
     setTasksList(updatedTasks);
   }, [tasksList]);
 
+  const handleAddTask = (newTask: {
+    title: string;
+    priority: 'high' | 'medium' | 'low';
+    time: string;
+  }) => {
+    setTasksList(prev => [...prev, {
+      ...newTask,
+      completed: false,
+    }]);
+  };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View className="flex-1 bg-gray-100">
@@ -38,7 +51,7 @@ export default function Tasks() {
         <ScrollView
           className="flex-1"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 20 }}
+          contentContainerStyle={{ paddingBottom: 100 }}
         >
           {/* Welcome Banner */}
           <View className="bg-gradient-to-r from-emerald-800/25 to-yellow-500/25 p-6">
@@ -82,9 +95,19 @@ export default function Tasks() {
         </ScrollView>
 
         {/* Add Task Button */}
-        <TouchableOpacity className="absolute bottom-8 right-8 w-14 h-14 bg-emerald-500 rounded-full items-center justify-center shadow-lg">
+        <TouchableOpacity 
+          className="absolute bottom-28 right-8 w-14 h-14 bg-emerald-500 rounded-full items-center justify-center shadow-lg"
+          onPress={() => setIsAddModalVisible(true)}
+        >
           <Plus size={24} color="white" />
         </TouchableOpacity>
+
+        {/* Add Task Modal */}
+        <AddTaskModal
+          visible={isAddModalVisible}
+          onClose={() => setIsAddModalVisible(false)}
+          onAdd={handleAddTask}
+        />
       </View>
     </GestureHandlerRootView>
   );
