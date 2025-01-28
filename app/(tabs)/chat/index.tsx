@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, FlatList, Animated, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, FlatList, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-
+import { Send, Bell } from "lucide-react-native";
 
 interface Message {
   id: string;
@@ -11,115 +10,87 @@ interface Message {
   timestamp: string;
 }
 
-const ChatScreen: React.FC = () => {
+export default function ChatScreen() {
   const [messages, setMessages] = useState<Message[]>([
     { id: "1", text: "Hello! How can I assist you today?", sender: "AI", timestamp: "23:19" },
   ]);
   const [inputText, setInputText] = useState<string>("");
-  const [timestampVisibility, setTimestampVisibility] = useState<{ [key: string]: boolean }>({});
+
+  const user = {
+    username: "Ferdinand",
+    avatar: "https://i.pinimg.com/736x/f3/d2/34/f3d2346a59335f12ec7b6c460177414a.jpg"
+  };
 
   const handleSend = () => {
     if (!inputText.trim()) return;
-    const newMessage: Message = { id: Date.now().toString(), text: inputText, sender: "user", timestamp: "Now" };
+    const newMessage: Message = { 
+      id: Date.now().toString(), 
+      text: inputText, 
+      sender: "user", 
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    };
     setMessages((prev) => [...prev, newMessage]);
     setInputText("");
   };
 
-  const toggleTimestamp = (id: string) => {
-    setTimestampVisibility((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
-
   return (
-    <SafeAreaView style={styles.container}>
+    <View className="flex-1 bg-gray-100">
+
+      {/* Welcome Banner */}
+      <View className="bg-gradient-to-r from-emerald-800/25 to-yellow-500/25 p-6">
+        <Text className="text-2xl font-semibold mb-2">Chat Assistant</Text>
+        <Text className="text-gray-600">
+          How can I help you today?
+        </Text>
+      </View>
+
+      {/* Chat Messages */}
       <FlatList
+        className="flex-1 px-4"
         data={messages}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity onLongPress={() => toggleTimestamp(item.id)} style={styles.messageWrapper}>
-            <Animated.View style={item.sender === "AI" ? styles.aiMessage : styles.userMessage}>
-              <Text style={styles.messageText}>{item.text}</Text>
-              {timestampVisibility[item.id] && (
-                <Animated.Text style={styles.timestamp}>{item.timestamp}</Animated.Text>
-              )}
-            </Animated.View>
-          </TouchableOpacity>
+          <View className={`mb-4 max-w-[80%] ${
+            item.sender === "AI" ? "self-start" : "self-end ml-auto"
+          }`}>
+            <View className={`p-4 rounded-2xl ${
+              item.sender === "AI" 
+                ? "bg-white" 
+                : "bg-emerald-500"
+            }`}>
+              <Text className={
+                item.sender === "AI" 
+                  ? "text-gray-900" 
+                  : "text-white"
+              }>
+                {item.text}
+              </Text>
+            </View>
+            <Text className="text-gray-500 text-xs mt-1 ml-2">
+              {item.timestamp}
+            </Text>
+          </View>
         )}
       />
 
-      <View style={styles.inputContainer}>
-        <TextInput
-          value={inputText}
-          onChangeText={setInputText}
-          style={styles.input}
-          placeholder="Type a message"
-        />
-        <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
-          <Ionicons name="send" size={24} color="white" />
-        </TouchableOpacity>
+      {/* Input Area */}
+      <View className="p-4 mb-24 flex justify-center items-center">
+        <View className="flex-row justify-center items-center bg-gray-100 rounded-full px-4 py-2 border-black border-2">
+          <TextInput
+            value={inputText}
+            onChangeText={setInputText}
+            placeholder="Type a message"
+            className="flex-1 text-base placeholder:mb-2"
+            multiline
+          />
+          <TouchableOpacity 
+            onPress={handleSend}
+            className="ml-2 w-10 h-10 bg-emerald-500 rounded-full items-center justify-center"
+          >
+            <Send size={20} color="white" />
+          </TouchableOpacity>
+        </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-    paddingHorizontal: 10,
-  },
-  messageWrapper: {
-    marginVertical: 5,
-  },
-  aiMessage: {
-    alignSelf: "flex-start",
-    backgroundColor: "#E8F3E2",
-    padding: 10,
-    borderRadius: 10,
-    maxWidth: "70%",
-  },
-  userMessage: {
-    alignSelf: "flex-end",
-    backgroundColor: "#FAC0CC",
-    padding: 10,
-    borderRadius: 10,
-    maxWidth: "70%",
-  },
-  messageText: {
-    fontSize: 16,
-    fontFamily: "MonaSans",
-  },
-  timestamp: {
-    fontSize: 12,
-    color: "#555",
-    marginTop: 5,
-    fontFamily: "MonaSans",
-  },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-    backgroundColor: "#F1F1F1",
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  input: {
-    flex: 1,
-    fontSize: 16,
-    padding: 10,
-    fontFamily: "MonaSans",
-  },
-  emojiButton: {
-    padding: 10,
-  },
-  sendButton: {
-    backgroundColor: "#FAC0CC",
-    padding: 10,
-    borderRadius: 50,
-    marginLeft: 10,
-  },
-});
-
-export default ChatScreen;
+}

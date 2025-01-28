@@ -17,24 +17,7 @@ export default function Home() {
   };
 
   return (
-    <SafeAreaView style={{ flexGrow: 1 }} className="bg-gray-100">
-      {/* Header with Avatar */}
-      <View className="flex-row items-center p-4 bg-white">
-        <Image 
-          source={{ uri: user.avatar }}
-          className="w-12 h-12 rounded-full mr-3"
-        />
-        <View className="flex-row items-center space-x-2">
-          <Text className="text-lg font-semibold">{user.username}</Text>
-          <Image 
-            className="w-2 h-2"
-          />
-        </View>
-        <TouchableOpacity className="ml-auto">
-          <Bell size={24} color="#666" />
-        </TouchableOpacity>
-      </View>
-      
+    <View style={{ flexGrow: 1 }} className="bg-gray-100">
       <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
@@ -115,7 +98,7 @@ export default function Home() {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 

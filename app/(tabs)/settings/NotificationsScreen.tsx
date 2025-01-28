@@ -1,59 +1,87 @@
-import { View, Text, Switch, StyleSheet } from "react-native";
-import { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, Text, Switch, ScrollView } from 'react-native';
+import { useState } from 'react';
+import { Bell, MessageCircle, Calendar, Activity } from 'lucide-react-native';
 
-const NotificationsScreen = () => {
-  const [pushNotifications, setPushNotifications] = useState(true);
-  const [emailAlerts, setEmailAlerts] = useState(false);
-  const [soundAlerts, setSoundAlerts] = useState(true);
+
+
+export default function NotificationsScreen() {
+  const [notifications, setNotifications] = useState({
+    pushEnabled: true,
+    emailEnabled: false,
+    remindersEnabled: true,
+    updatesEnabled: true
+  });
+
+  const notificationSections = [
+    {
+      title: 'General',
+      items: [
+        { 
+          icon: Bell,
+          label: 'Push Notifications',
+          key: 'pushEnabled',
+          description: 'Receive push notifications'
+        },
+        { 
+          icon: MessageCircle,
+          label: 'Email Notifications',
+          key: 'emailEnabled',
+          description: 'Receive email updates'
+        }
+      ]
+    },
+    {
+      title: 'Activities',
+      items: [
+        { 
+          icon: Calendar,
+          label: 'Reminders',
+          key: 'remindersEnabled',
+          description: 'Get reminded about tasks'
+        },
+        { 
+          icon: Activity,
+          label: 'App Updates',
+          key: 'updatesEnabled',
+          description: 'Receive app update notifications'
+        }
+      ]
+    }
+  ];
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Notifications</Text>
-
-      <View style={styles.settingRow}>
-        <Text style={styles.settingText}>Push Notifications</Text>
-        <Switch value={pushNotifications} onValueChange={setPushNotifications} />
+    <ScrollView className="flex-1 bg-gray-100">
+      <View className="p-4 gap-6">
+        {notificationSections.map((section, index) => (
+          <View key={index} className="bg-white rounded-xl overflow-hidden">
+            <Text className="text-gray-500 text-sm uppercase px-4 pt-4 pb-2">
+              {section.title}
+            </Text>
+            {section.items.map((item, itemIndex) => {
+              const Icon = item.icon;
+              return (
+                <View
+                  key={itemIndex}
+                  className="flex-row items-center px-4 py-4 border-t border-gray-100"
+                >
+                  <Icon size={20} color="#666" />
+                  <View className="flex-1 ml-3">
+                    <Text className="text-gray-900">{item.label}</Text>
+                    <Text className="text-gray-500 text-sm">{item.description}</Text>
+                  </View>
+                  <Switch
+                    value={notifications[item.key as keyof typeof notifications]}
+                    onValueChange={(value) => 
+                      setNotifications(prev => ({...prev, [item.key]: value}))
+                    }
+                    trackColor={{ false: '#D1D5DB', true: '#90C088' }}
+                  />
+                </View>
+              );
+            })}
+          </View>
+        ))}
       </View>
-
-      <View style={styles.settingRow}>
-        <Text style={styles.settingText}>Email Alerts</Text>
-        <Switch value={emailAlerts} onValueChange={setEmailAlerts} />
-      </View>
-
-      <View style={styles.settingRow}>
-        <Text style={styles.settingText}>Sound Alerts</Text>
-        <Switch value={soundAlerts} onValueChange={setSoundAlerts} />
-      </View>
-    </SafeAreaView>
+    </ScrollView>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    fontFamily: "MonaSans",
-    marginBottom: 20,
-  },
-  settingRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#E8F3E2",
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 10,
-  },
-  settingText: {
-    fontSize: 18,
-    fontFamily: "MonaSans",
-  },
-});
-
-export default NotificationsScreen;
+}
