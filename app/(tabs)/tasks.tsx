@@ -102,7 +102,7 @@ const TaskCard = ({ task, onToggleCompletion }: {
       <View className={`w-5 h-5 rounded-full border-2 mr-3 ${
         task.priority === 'high' ? 'border-red-500' 
         : task.priority === 'medium' ? 'border-yellow-500' 
-        : 'border-green-500'} ${task.completed && 'bg-emerald-500 border-emerald-500'}`}
+        : 'border-green-500'} ${task.completed && 'bg-gray-300 border-gray-300'}`}
       >
         {task.completed && <Check size={14} color="white" />}
       </View>
@@ -132,7 +132,7 @@ const CategoryCard = ({ title, count, color }: CategoryCardProps) => {
       <Text className="text-gray-500 text-sm font-light">{count} tasks</Text>
       <Text className="text-gray-900 text-xl font-bold mb-2">{title}</Text>
       <View className="w-full h-1 bg-gray-300 rounded-full" >
-        <View className={`h-1 ${color} w-[${count}%] rounded-full`} />
+        <View className={`h-1 w-[${count}%] ${color} rounded-full`} />
       </View>
     </View>
   );

@@ -39,7 +39,7 @@ export default function WelcomeScreen() {
             <Text style={styles.footerText}>Don't have an account? </Text>
             <Text
               style={styles.footerLink}
-              onPress={() => router.push('/RegisterScreen')}
+              onPress={() => router.replace('/RegisterScreen')}
             >
               Register
             </Text>

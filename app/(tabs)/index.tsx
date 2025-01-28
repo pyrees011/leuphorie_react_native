@@ -84,11 +84,11 @@ export default function Home() {
           </View>
 
           {/* Activity Timeline */}
-          <View className="bg-white rounded-xl p-4">
+          <View className="bg-white rounded-xl p-4 mb-24">
             <Text className="text-xl font-semibold mb-4">Recent Activity</Text>
             <View className="gap-2">
               {activityData.map((item, index) => (
-                <View className="flex-row items-center space-x-3" key={index}>
+                <View className="flex-row items-center gap-2" key={index}>
                   <View className="w-2 h-2 rounded-full bg-emerald-400" />
                   <Text className="text-gray-600">{item.title}</Text>
                   <Text className="text-gray-400">{item.time}</Text>

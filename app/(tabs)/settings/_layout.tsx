@@ -16,7 +16,7 @@ export default function SettingsLayout() {
       <Stack.Screen 
         name="ProfileScreen" 
         options={{ 
-          headerShown: true,
+          headerShown: false,
           title: "Profile",
           headerShadowVisible: false,
         }} 
@@ -24,7 +24,7 @@ export default function SettingsLayout() {
       <Stack.Screen 
         name="NotificationsScreen" 
         options={{ 
-          headerShown: true,
+          headerShown: false,
           title: "Notifications",
           headerShadowVisible: false,
         }} 
@@ -32,7 +32,7 @@ export default function SettingsLayout() {
       <Stack.Screen 
         name="PrivacySecurityScreen" 
         options={{ 
-          headerShown: true,
+          headerShown: false,
           title: "Privacy & Security",
           headerShadowVisible: false,
         }} 
@@ -40,7 +40,7 @@ export default function SettingsLayout() {
       <Stack.Screen 
         name="AppPreferencesScreen" 
         options={{ 
-          headerShown: true,
+          headerShown: false,
           title: "App Preferences",
           headerShadowVisible: false,
         }} 
