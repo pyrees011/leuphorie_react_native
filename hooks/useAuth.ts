@@ -1,7 +1,18 @@
 import { useState, useEffect } from 'react';
-import { firebaseAuth } from '../config/firebase';
 import { router } from 'expo-router';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, updateProfile, signOut } from 'firebase/auth';
+
+// firebase
+import { firebaseAuth } from '../config/firebase';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  updateProfile,
+  signOut
+} from 'firebase/auth';
+
+// storage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface User {
   uid: string | null;
@@ -15,25 +26,35 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    return onAuthStateChanged(firebaseAuth, async (user) => {
-      const token = await user?.getIdToken();
+    const unsubscribe = onAuthStateChanged(firebaseAuth, async (firebaseUser) => {
+      if (firebaseUser) {
+        const token = await firebaseUser.getIdToken();
 
-      localStorage.setItem('token', token || '');
-      setUser({
-        uid: user?.uid || null,
-        email: user?.email || null,
-        username: user?.displayName || null,
-        token: token || null,
-      });
-      setLoading(false);
-      if (user) {
+        // Save token in AsyncStorage
+        await AsyncStorage.setItem('token', token);
+
+        setUser({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email,
+          username: firebaseUser.displayName,
+          token: token,
+        });
+
+        // Navigate to (tabs) only if a user exists
         router.replace('/(tabs)');
+      } else {
+        setUser(null);
       }
+
+      setLoading(false);
     });
+
+    return () => unsubscribe();
   }, []);
 
   const signIn = async (email: string, password: string) => {
     try {
+      console.log("Signing in:", email, password);
       await signInWithEmailAndPassword(firebaseAuth, email, password);
     } catch (error) {
       throw error;
@@ -43,11 +64,7 @@ export function useAuth() {
   const signUp = async (username: string, email: string, password: string) => {
     try {
       const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-      await updateProfile(userCredential.user, {
-        displayName: username
-      });
-
-
+      await updateProfile(userCredential.user, { displayName: username });
     } catch (error) {
       throw error;
     }
@@ -56,6 +73,7 @@ export function useAuth() {
   const Logout = async () => {
     try {
       await signOut(firebaseAuth);
+      await AsyncStorage.removeItem('token');
       router.replace('/');
     } catch (error) {
       throw error;
@@ -69,4 +87,4 @@ export function useAuth() {
     signUp,
     Logout,
   };
-} 
+}

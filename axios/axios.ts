@@ -1,5 +1,10 @@
 import axios from 'axios';
+
+// firebase
 import { firebaseAuth } from '../config/firebase';
+
+// storage
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const API_URL = 'http://127.0.0.1:8000/api/v1';
 
@@ -12,10 +17,9 @@ export const useAxiosInstance = () => {
   });
 
   instance.interceptors.request.use(
-    (config) => {
-      const token = localStorage.getItem('token');
+    async (config) => {
+      const token = await AsyncStorage.getItem('token');
       if (token) {
-        // Make sure to format the token exactly as expected by your backend
         config.headers.Authorization = `Bearer ${token.trim()}`;
       }
       return config;
