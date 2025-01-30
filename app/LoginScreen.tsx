@@ -1,28 +1,38 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
+
+// Icons
 import { ArrowLeft } from 'lucide-react-native';
+
+// Components
 import { AuthButton } from '../components/auth/AuthButton';
 import { AuthInput } from '../components/auth/AuthInput';
 import { SocialAuth } from '../components/auth/SocialAuth';
+
+// Hooks
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuth } from '../hooks/useAuth';
 
 export default function LoginScreen() {
   const router = useRouter();
-  const [email, setEmail] = useState('ferdinands@gmail.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { signIn } = useAuth();
+
+  const handleLogin = async () => {
+    try {
+      await signIn(email, password);
+    } catch (error) {
+      Alert.alert('Error', error instanceof Error ? error.message : 'An unknown error occurred');
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-white p-5">
-      <TouchableOpacity
-        className="mb-6"
-        onPress={() => router.back()}
-      >
-        <ArrowLeft size={24} color="#666" />
-      </TouchableOpacity>
 
-      <View className="gap-2 mb-6">
-        <Text className="text-2xl font-bold text-gray-900">Sign in to your Account</Text>
+      <View className="gap-1 mb-6">
+        <Text className="text-2xl font-bold text-gray-900">Leuphorie</Text>
         <Text className="text-base text-gray-600">Sign in to your Account</Text>
       </View>
 
@@ -47,7 +57,7 @@ export default function LoginScreen() {
 
         <AuthButton
           title="Login"
-          onPress={() => router.replace('/(tabs)')}
+          onPress={handleLogin}
         />
 
         <SocialAuth />
