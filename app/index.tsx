@@ -34,7 +34,7 @@ export default function WelcomeScreen() {
         <View className="gap-6">
           <AuthButton
             title="Continue with email"
-            onPress={() => { router.replace('/LoginScreen') }}
+            onPress={() => router.push('/LoginScreen')}
           />
           <AuthButton
             title="Continue with number"
@@ -47,7 +47,7 @@ export default function WelcomeScreen() {
             <Text className="text-sm text-gray-900">Don't have an account? </Text>
             <Text
               className="text-sm font-bold text-gray-900"
-              onPress={() => router.replace('/RegisterScreen')}
+              onPress={() => router.push('/RegisterScreen')}
             >
               Register
             </Text>
