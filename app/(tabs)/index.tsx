@@ -5,16 +5,20 @@ import { router } from 'expo-router';
 // Icons
 import { Waves, Activity, Calendar, Bell } from 'lucide-react-native';
 
+// Hooks
+import { useAuth } from '../../hooks/useAuth';
+
 export default function Home() {
   // TODO: make this dynamic
   // TODO: connect to the database
   // TODO: fix the states
   // TODO: fix the scroll view
   // TODO: divide into components if possible
-  const user = {
-    username: "Ferdinand",
-    avatar: "https://i.pinimg.com/736x/f3/d2/34/f3d2346a59335f12ec7b6c460177414a.jpg"
-  };
+  const { user } = useAuth();
+
+  if (!user) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <View style={{ flexGrow: 1 }} className="bg-gray-100">
@@ -84,11 +88,11 @@ export default function Home() {
           </View>
 
           {/* Activity Timeline */}
-          <View className="bg-white rounded-xl p-4">
+          <View className="bg-white rounded-xl p-4 mb-24">
             <Text className="text-xl font-semibold mb-4">Recent Activity</Text>
             <View className="gap-2">
               {activityData.map((item, index) => (
-                <View className="flex-row items-center space-x-3" key={index}>
+                <View className="flex-row items-center gap-2" key={index}>
                   <View className="w-2 h-2 rounded-full bg-emerald-400" />
                   <Text className="text-gray-600">{item.title}</Text>
                   <Text className="text-gray-400">{item.time}</Text>
