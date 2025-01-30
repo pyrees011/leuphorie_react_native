@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
-import { useRouter } from "expo-router";
+import { RelativePathString, useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const contactOptions = [
@@ -14,7 +14,7 @@ const ContactScreen = () => {
   const router = useRouter();
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-100">
+    <View className="flex-1 bg-gray-10 mt-4">
       <ScrollView
         className="flex-1"
         showsVerticalScrollIndicator={false}
@@ -32,7 +32,7 @@ const ContactScreen = () => {
             <TouchableOpacity
               key={index}
               className="flex-row items-center p-4 border-b border-gray-200"
-              onPress={() => router.push(`contact/${item.screen}`)}
+              onPress={() => router.push(`contact/${item.screen}` as RelativePathString)}
             >
               <Image source={item.icon} style={{ width: 24, height: 24, resizeMode: "contain", marginRight: 12 }} />
               <Text className="text-lg font-medium">{item.name}</Text>
@@ -40,7 +40,7 @@ const ContactScreen = () => {
           ))}
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -12,7 +12,7 @@ const faqs = [
 
 const FAQScreen = () => {
   return (
-    <SafeAreaView className="flex-1 bg-white p-5">
+    <View className="flex-1 bg-white p-5 mt-4">
       <Text className="text-2xl font-bold text-center mb-4">Frequently Asked Questions</Text>
       <ScrollView>
         {faqs.map((faq, index) => (
@@ -22,7 +22,7 @@ const FAQScreen = () => {
           </View>
         ))}
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
