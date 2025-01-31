@@ -4,11 +4,15 @@ import { Svg, Path } from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 
+// hooks
+import { useQuestionnaire } from '../hooks/useQuestionnaire';
+
 // utils
 import { cn } from '../lib/utils';
 
 // icons
 import { Smile, ThumbsUp, Meh, Frown, Activity, Calendar, CalendarDays, XCircle, Zap, AlertCircle, AlertTriangle, Moon, CloudMoon, Cloud, CloudOff, Apple, Sandwich, Pizza, Cookie, Battery, BatteryMedium, BatteryLow, Coffee, Check } from 'lucide-react-native';
+import { useAuth } from '@/hooks/useAuth';
 
 interface QuestionnaireCardProps {
     options: {
@@ -21,15 +25,36 @@ interface QuestionnaireCardProps {
 }
 
 export default function QuestionnaireScreen() {
-  const [selectedOption, setSelectedOption] = useState('design');
+  const { user } = useAuth();
+  const { createQuestionnaire } = useQuestionnaire();
+  const [selectedOption, setSelectedOption] = useState([
+    { id: 1, selectedOption: '' },
+    { id: 2, selectedOption: '' },
+    { id: 3, selectedOption: '' },
+    { id: 4, selectedOption: '' },
+    { id: 5, selectedOption: '' },
+    { id: 6, selectedOption: '' },
+  ]);
   const [currentStep, setCurrentStep] = useState(1);
 
   const handleQuestionnaireCardPress = (id: string) => {
-    setSelectedOption(id);
+    setSelectedOption(prev => {
+      const newstate = [...prev];
+      newstate[currentStep - 1].selectedOption = id;
+      return newstate;
+    });
     setTimeout(() => {
         if (currentStep < 6) {
             setCurrentStep(currentStep + 1);
         } else {
+            selectedOption.forEach(({ id, selectedOption }) => {
+              const newItem = {
+                user_id: user?.uid,
+                question_id: id,
+                answer: selectedOption
+              }
+              createQuestionnaire(newItem);
+            });
             router.replace('/(tabs)');
         }
     }, 200);
@@ -69,7 +94,7 @@ export default function QuestionnaireScreen() {
             <QuestionnaireCard
               key={option.id}
               options={option}
-              selectedOption={selectedOption}
+              selectedOption={selectedOption[currentStep - 1].selectedOption}
               handleQuestionnaireCardPress={handleQuestionnaireCardPress}
             />
         ))}

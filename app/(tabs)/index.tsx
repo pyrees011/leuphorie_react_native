@@ -14,7 +14,9 @@ export default function Home() {
   // TODO: fix the states
   // TODO: fix the scroll view
   // TODO: divide into components if possible
-  const { user } = useAuth();
+  const { user, Logout } = useAuth();
+
+  console.log(user);
 
   if (!user) {
     return <Text>Loading...</Text>;
@@ -39,6 +41,9 @@ export default function Home() {
           <Text className="text-gray-600 text-base">
             Let's help you stay on top of your health
           </Text>
+          <TouchableOpacity onPress={Logout} className="bg-gray-100 px-4 py-2 rounded-lg">
+            <Text className="text-black">Logout</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Dashboard Section */}

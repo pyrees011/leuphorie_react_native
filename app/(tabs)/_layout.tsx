@@ -9,11 +9,14 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Bell } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function TabLayout() {
+  const { user } = useAuth();
   const colorScheme = useColorScheme();
-  const user = {
-    username: "Ferdinand",
+
+  const userObject = {
+    username: user?.username,
     avatar: "https://i.pinimg.com/736x/f3/d2/34/f3d2346a59335f12ec7b6c460177414a.jpg"
   };
 
@@ -23,11 +26,11 @@ export default function TabLayout() {
       <SafeAreaView edges={['top']} className="bg-white pb-0 mb-0">
         <View className="flex-row items-center p-4 bg-white">
           <Image 
-            source={{ uri: user.avatar }}
+            source={{ uri: userObject.avatar }}
             className="w-12 h-12 rounded-full mr-3"
           />
           <View className="flex-row items-center space-x-2">
-            <Text className="text-lg font-semibold">{user.username}</Text>
+            <Text className="text-lg font-semibold">{userObject.username}</Text>
           </View>
           <TouchableOpacity className="ml-auto">
             <Bell size={24} color="#666" />

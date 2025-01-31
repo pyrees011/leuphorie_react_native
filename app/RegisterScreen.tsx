@@ -53,13 +53,13 @@ export default function RegisterScreen() {
             placeholder="Password"
             value={password}
             onChangeText={setPassword}
-            secureTextEntry
+            // secureTextEntry
           />
           <AuthInput
             placeholder="Repeat Password"
             value={confirmPassword}
             onChangeText={setConfirmPassword}
-            secureTextEntry
+            // secureTextEntry
           />
         </View>
 

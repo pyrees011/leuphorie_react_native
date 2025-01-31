@@ -14,7 +14,7 @@ import {
 // storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface User {
+export interface User {
   uid: string | null;
   email: string | null;
   username: string | null;
@@ -27,9 +27,10 @@ export function useAuth() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, async (firebaseUser) => {
+      console.log(firebaseUser);
       if (firebaseUser) {
         const token = await firebaseUser.getIdToken();
-
+        console.log(token);
         // Save token in AsyncStorage
         await AsyncStorage.setItem('token', token);
 
@@ -40,8 +41,8 @@ export function useAuth() {
           token: token,
         });
 
-        // Navigate to (tabs) only if a user exists
-        router.replace('/(tabs)');
+        // // Navigate to (tabs) only if a user exists
+        // router.replace('/(tabs)');
       } else {
         setUser(null);
       }
@@ -56,6 +57,7 @@ export function useAuth() {
     try {
       console.log("Signing in:", email, password);
       await signInWithEmailAndPassword(firebaseAuth, email, password);
+      router.replace('/(tabs)');
     } catch (error) {
       throw error;
     }
@@ -63,18 +65,47 @@ export function useAuth() {
 
   const signUp = async (username: string, email: string, password: string) => {
     try {
-      const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-      await updateProfile(userCredential.user, { displayName: username });
+        // Create user
+        const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+        const user = userCredential.user;
+
+        // Update profile with display name
+        await updateProfile(user, { displayName: username });
+
+        // 🔥 Reload user to get updated `displayName`
+        await user.reload();
+
+        // 🔥 Fetch updated user object after reload
+        const updatedUser = firebaseAuth.currentUser;
+
+        if (updatedUser) {
+            // Save token and update state
+            const token = await updatedUser.getIdToken();
+            await AsyncStorage.setItem('token', token);
+
+            setUser({
+                uid: updatedUser.uid,
+                email: updatedUser.email,
+                username: updatedUser.displayName,
+                token: token,
+            });
+
+            // Navigate to the questionnaire page
+            router.replace('/questionnaire');
+        }
+
     } catch (error) {
-      throw error;
+        console.error("Signup Error:", error);
+        throw error;
     }
-  };
+};
+
 
   const Logout = async () => {
     try {
       await signOut(firebaseAuth);
       await AsyncStorage.removeItem('token');
-      router.replace('/');
+      router.replace('/LoginScreen');
     } catch (error) {
       throw error;
     }
