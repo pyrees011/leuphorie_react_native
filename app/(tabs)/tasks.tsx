@@ -4,6 +4,7 @@ import { Plus, Check, Bell } from 'lucide-react-native';
 import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
 import { useState, useCallback } from 'react';
 import { AddTaskModal } from '../../components/ui/AddTaskModal';
+import { useTasks } from '@/hooks/useTask';
 
 interface DeletedTask {
   task: typeof tasks[0];
@@ -19,10 +20,9 @@ interface CategoryCardProps {
 export default function Tasks() {
   const [tasksList, setTasksList] = useState(tasks);
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-  const user = {
-    username: "Ferdinand",
-    avatar: "https://i.pinimg.com/736x/f3/d2/34/f3d2346a59335f12ec7b6c460177414a.jpg"
-  };
+  const { categories } = useTasks();
+
+  console.log("categories", categories);
 
   const handleTaskCompletion = useCallback((index: number) => {
     const updatedTasks = [...tasksList];

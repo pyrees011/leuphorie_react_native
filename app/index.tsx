@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'expo-router';
 import { View, Text, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -6,9 +6,25 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 // components
 import { AuthButton } from '../components/auth/AuthButton';
 import { SocialAuth } from '../components/auth/SocialAuth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function WelcomeScreen() {
   const router = useRouter();
+
+  // useEffect(() => {
+  //   const checkToken = async () => {
+  //     try {
+  //       const token = await AsyncStorage.getItem('token');
+  //       if (token) {
+  //         router.replace('/(tabs)');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching token:', error);
+  //     }
+  //   };
+
+  //   checkToken();
+  // }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-white">

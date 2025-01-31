@@ -5,6 +5,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Send, Bell } from "lucide-react-native";
+import { useChat } from "@/hooks/useChat";
 
 interface Message {
   id: string;
@@ -14,16 +15,12 @@ interface Message {
 }
 
 export default function ChatScreen() {
+  const { messages : messagesChat, sendMessage, isLoading, isError, error } = useChat();
   const [messages, setMessages] = useState<Message[]>([
     { id: "1", text: "Hello! How can I assist you today?", sender: "AI", timestamp: "23:19" },
   ]);
   const [inputText, setInputText] = useState<string>("");
   const flatListRef = useRef<FlatList>(null);
-
-  const user = {
-    username: "Ferdinand",
-    avatar: "https://i.pinimg.com/736x/f3/d2/34/f3d2346a59335f12ec7b6c460177414a.jpg"
-  };
 
   const handleSend = () => {
     if (!inputText.trim()) return;
